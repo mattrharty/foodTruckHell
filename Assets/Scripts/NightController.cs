@@ -132,7 +132,8 @@ public class NightController : MonoBehaviour
         hungerMult = 0.75f + 0.25f * nightNum;
         speedMult = 0.9f + 0.1f * nightNum;
         spawnCooldown = 8 * Mathf.Atan(-0.8f * (nightNum - 1)) + 15;
-        nightText.text = "Night " + nightNum;
+        string[] days = new string[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        nightText.text = days[nightNum % 7] + "Night";
     }
 
 }
