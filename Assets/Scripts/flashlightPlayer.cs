@@ -51,7 +51,7 @@ public class flashlightPlayer : MonoBehaviour
             {
                 Debug.Log(hit.collider);
                 flashlightEffect.transform.position = hit.point - new Vector3 (0.0f, 0.6f, 0.0f);
-                flashlightEffect.transform.parent.eulerAngles = new Vector3 (0, flashlightEffect.transform.localPosition.x / 0.25f * 20, 0);
+                flashlightEffect.transform.parent.eulerAngles = new Vector3 (0, flashlightEffect.transform.localPosition.x / 0.25f * 30, 0);
             }
         }
         else
