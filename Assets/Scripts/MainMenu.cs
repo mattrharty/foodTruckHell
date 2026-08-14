@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
         global = GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>();
         if(global.loadFile()){
             cont.interactable = true;
-            cont.transform.GetChild(1).GetComponent<TMP_Text>().text = global.getNightNum() + "";
+            cont.transform.GetChild(1).GetComponent<TMP_Text>().text = global.getNightNum() + 1 + "";
         }
         else{
             cont.interactable = false;
@@ -27,7 +27,7 @@ public class MainMenu : MonoBehaviour
 
     public void newGame()
     {
-        global.setNightNum(1);
+        global.setNightNum(0);
         play();
     }
     

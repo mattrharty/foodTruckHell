@@ -149,9 +149,9 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 0
+      x: 4
       y: 66
-      width: 132
+      width: 128
       height: 64
     spriteID: 5e673843e9d52044c947c487077f67c5
     spriteBone: []
@@ -170,8 +170,8 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 132
-      y: 67
-      width: 132
+      y: 66
+      width: 128
       height: 64
     spriteID: dc36a03499cb9fe4a8c8b3dc45efd414
     spriteBone: []
@@ -1309,9 +1309,9 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 264
+      x: 270
       y: 67
-      width: 132
+      width: 128
       height: 64
     spriteID: 509b3e01270ec544f80efeee8aa0de49
     spriteBone: []

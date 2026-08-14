@@ -1,0 +1,34 @@
+{
+    "name": "defaultInput",
+    "maps": [
+        {
+            "name": "Default",
+            "id": "2091e0ac-d92e-40d9-b0d3-4933a401a669",
+            "actions": [
+                {
+                    "name": "flashlight",
+                    "type": "Button",
+                    "id": "eeb7479a-af61-4aea-9f69-d6c621b816a5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c9d3d896-0a0a-4187-9031-856ec77dd2fd",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "flashlight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
