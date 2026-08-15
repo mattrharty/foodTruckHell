@@ -62,7 +62,7 @@ public class NightController : MonoBehaviour
             Destroy(ing.gameObject);
         if (z.eatFood(foodVal))
         {
-            fadeOut.SetTrigger("flicker");
+            //fadeOut.SetTrigger("flicker");
             yield return new WaitForSeconds(1.25f);
             Destroy(z.gameObject);
         }

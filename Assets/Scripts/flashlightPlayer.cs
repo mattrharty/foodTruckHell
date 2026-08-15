@@ -22,6 +22,7 @@ public class flashlightPlayer : MonoBehaviour
 
     [SerializeField] private Transform flashlightEffect;
     [SerializeField] private Animator flashlightAnim;
+    [SerializeField] private Transform spotLight;
 
     private float batteryLife = 99.99f;
     private bool broke = false;
@@ -42,6 +43,7 @@ public class flashlightPlayer : MonoBehaviour
             lightImg.sprite = lightStates[1];
             flashlightAnim.SetBool("clicking", true);
             batteryLife -= Time.deltaTime * (batteryLife / 100f);
+            spotLight.gameObject.GetComponent<Light>().intensity = 6.0f;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -49,15 +51,18 @@ public class flashlightPlayer : MonoBehaviour
             // Cast the ray and check if it hits anything
             if (Physics.Raycast(ray, out hit, 500, layer))
             {
-                Debug.Log(hit.collider);
-                flashlightEffect.transform.position = hit.point - new Vector3 (0.0f, 0.6f, 0.0f);
-                flashlightEffect.transform.parent.eulerAngles = new Vector3 (0, flashlightEffect.transform.localPosition.x / 0.25f * 30, 0);
+                flashlightEffect.position = hit.point - new Vector3 (0.0f, 0.6f, 0.0f);
+                flashlightEffect.parent.eulerAngles = new Vector3 (0, flashlightEffect.localPosition.x / 0.25f * 30, 0);
+
+                float depth = Mathf.Abs(flashlightEffect.position.z - spotLight.position.z);
+                spotLight.eulerAngles = new Vector3 (toDeg(Mathf.Atan(flashlightEffect.position.y / depth)) * -1.0f + 22.5f, toDeg(Mathf.Atan(flashlightEffect.position.x / depth)), 0);
             }
         }
         else
         {
             lightImg.sprite = lightStates[0];
             flashlightAnim.SetBool("clicking", false);
+            spotLight.gameObject.GetComponent<Light>().intensity = 0.0f;
         }
 
         
@@ -77,6 +82,11 @@ public class flashlightPlayer : MonoBehaviour
     public void refillBattery()
     {
         batteryLife = 99.99f;
+    }
+
+    private float toDeg(float rad)
+    {
+        return rad * (180 / Mathf.PI);
     }
 
     public void blinkLight()
