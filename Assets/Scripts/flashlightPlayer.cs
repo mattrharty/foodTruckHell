@@ -10,7 +10,9 @@ public class flashlightPlayer : MonoBehaviour
 
     [SerializeField] private float totalBattery = 100f;
 
-    [SerializeField] public InputActionReference input;
+    [SerializeField] private InputActionReference input;
+
+    [SerializeField] private playerController player;
 
     [SerializeField] private Sprite[] batStates;
     [SerializeField] private Sprite[] lightStates;
@@ -23,6 +25,8 @@ public class flashlightPlayer : MonoBehaviour
     [SerializeField] private Transform flashlightEffect;
     [SerializeField] private Animator flashlightAnim;
     [SerializeField] private Transform spotLight;
+
+    [SerializeField] private Transform canvasLight;
 
     private float batteryLife = 99.99f;
     private bool broke = false;
@@ -38,13 +42,9 @@ public class flashlightPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (input.action.IsPressed())
-        {
-            lightImg.sprite = lightStates[1];
-            flashlightAnim.SetBool("clicking", true);
-            batteryLife -= Time.deltaTime * (batteryLife / 100f);
-            spotLight.gameObject.GetComponent<Light>().intensity = 6.0f;
+        canvasLight.position = Input.mousePosition;
 
+        if(player.getLoc().Equals("window")){
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             LayerMask layer = LayerMask.GetMask("darkness");
@@ -58,11 +58,23 @@ public class flashlightPlayer : MonoBehaviour
                 spotLight.eulerAngles = new Vector3 (toDeg(Mathf.Atan(flashlightEffect.position.y / depth)) * -1.0f + 22.5f, toDeg(Mathf.Atan(flashlightEffect.position.x / depth)), 0);
             }
         }
+
+        if (input.action.IsPressed())
+        {
+            lightImg.sprite = lightStates[1];
+            flashlightAnim.SetBool("clicking", true);
+            batteryLife -= Time.deltaTime * (batteryLife / 100f);
+            spotLight.gameObject.GetComponent<Light>().intensity = 6.0f;
+
+            canvasLight.gameObject.SetActive(true);
+        }
         else
         {
             lightImg.sprite = lightStates[0];
             flashlightAnim.SetBool("clicking", false);
             spotLight.gameObject.GetComponent<Light>().intensity = 0.0f;
+
+            canvasLight.gameObject.SetActive(false);
         }
 
         

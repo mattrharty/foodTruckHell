@@ -1,22 +1,108 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class playerController : MonoBehaviour
 {
 
     [SerializeField] private Transform holdLoc;
     private GameObject heldObj = null;
+    private bool canInteract = false;
+
+    [SerializeField] private InputActionReference left;
+    [SerializeField] private InputActionReference right;
+    [SerializeField] private InputActionReference flashlight;
+    [SerializeField] private GameObject[] turnHUD;
+
+    private string pos;
+
+    [SerializeField] private Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
+        canInteract = true;
+        pos = "window";
+
+        anim.Play("backWindow", 0, 1.0f);
+    }
+
+    public IEnumerator turnLeft()
+    {
+        canInteract = false;
+        if(pos.Equals("window"))
+            pos = "back";
+        else if(pos.Equals("back"))
+            pos = "grill";
+        else if(pos.Equals("grill"))
+            pos = "window";
+        anim.SetTrigger("left");
+
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+
+        canInteract = true;
+    }
+
+    public IEnumerator turnRight()
+    {
+        canInteract = false;
+        if(pos.Equals("window"))
+            pos = "grill";
+        else if(pos.Equals("back"))
+            pos = "window";
+        else if(pos.Equals("grill"))
+            pos = "back";
+        anim.SetTrigger("right");
         
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+
+        canInteract = true;
+    }
+
+    public void turnHandler(bool left)
+    {
+        if (left)
+            StartCoroutine(turnLeft());
+        else
+            StartCoroutine(turnRight());
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Checks canInteract
+        if (!canInteract)
+        {
+            left.action.Disable();
+            right.action.Disable();
+            flashlight.action.Disable();
+            foreach(GameObject obj in turnHUD)
+                obj.SetActive(false);
+            return;
+        } else
+        {
+            left.action.Enable();
+            right.action.Enable();
+            flashlight.action.Enable();
+            foreach(GameObject obj in turnHUD)
+                obj.SetActive(true);
+        }
+
+        // Checks for left and right input
+        if (left.action.IsPressed())
+        {
+            StartCoroutine(turnLeft());
+        }
+        if (right.action.IsPressed())
+        {
+            StartCoroutine(turnRight());
+        }
+
         // Create a ray from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -29,6 +115,10 @@ public class playerController : MonoBehaviour
                 if(heldObj == null)
                     grabObj(hit.collider.gameObject.GetComponent<IngredBin>().getIngred());
             }
+            else if(hit.collider.gameObject.GetComponent<clickableObj>() != null)
+            {
+                hit.collider.gameObject.GetComponent<clickableObj>().run();
+            }
             else if(hit.collider.gameObject.name.Equals("trash")){
                 if(heldObj == null)
                     return;
@@ -40,7 +130,7 @@ public class playerController : MonoBehaviour
                 int i = hit.collider.gameObject.transform.GetSiblingIndex();
                 if(heldObj == null)
                     return;
-                if(hit.collider.gameObject.transform.parent.gameObject.GetComponent<Grill>().fillSlot(heldObj, i))
+                if(hit.collider.gameObject.transform.parent.parent.gameObject.GetComponent<Grill>().fillSlot(heldObj, i))
                     placeObj(hit.collider.gameObject.transform.GetChild(0));
             }
             else if(hit.collider.gameObject.GetComponent<Ingred>() != null)
@@ -50,7 +140,7 @@ public class playerController : MonoBehaviour
                     return;
                 Debug.Log(hit.collider.gameObject.name);
                 if(hit.collider.transform.parent.parent.tag.Equals("grillSpot"))
-                    hit.collider.transform.parent.parent.parent.gameObject.GetComponent<Grill>().emptySlot(hit.collider.gameObject);
+                    hit.collider.transform.parent.parent.parent.parent.gameObject.GetComponent<Grill>().emptySlot(hit.collider.gameObject);
                 grabObj(hit.collider.gameObject);
             } else if (hit.collider.gameObject.GetComponent<CounterSpot>() != null)
             {
@@ -59,9 +149,6 @@ public class playerController : MonoBehaviour
                 float n = hit.collider.gameObject.GetComponent<CounterSpot>().addFood(heldObj);
                 if(n > -0.5f)
                     placeObj(hit.collider.transform.GetChild(0), n);
-            }   else if (hit.collider.gameObject.GetComponent<bell>() != null)
-            {
-                hit.collider.gameObject.GetComponent<bell>().getCounter().ding();
             }
         }
     }
@@ -77,6 +164,11 @@ public class playerController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public string getLoc()
+    {
+        return pos;
     }
 
     public bool placeObj(Transform endLoc)

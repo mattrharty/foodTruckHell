@@ -9,6 +9,7 @@ public class Ingred : MonoBehaviour
     public Sprite[] states;
     private float cookTime;
     private bool grabbable;
+    private flavor state;
 
     public void Start()
     {
@@ -64,4 +65,20 @@ public class Ingred : MonoBehaviour
     {
         gameObject.GetComponent<Animator>().SetTrigger("sendOut");
     }
+
+    public void setFlavor(flavor flav)
+    {
+        state = flav;
+    }
+
+    public flavor getFlavor(){
+        return state;
+    }
+}
+
+public enum flavor
+{
+    cola,
+    cherry,
+    lime
 }
