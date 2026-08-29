@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,16 @@ public class Ingred : MonoBehaviour
     public Sprite[] states;
     private float cookTime;
     private bool grabbable;
-    private flavor state;
 
     public void Start()
     {
         cookTime = 30;
         grabbable = true;
+    }
+
+    public void Update()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt((transform.position.y + 20) * 100);
     }
 
     public Ingred(IngredType _name)
@@ -66,19 +71,4 @@ public class Ingred : MonoBehaviour
         gameObject.GetComponent<Animator>().SetTrigger("sendOut");
     }
 
-    public void setFlavor(flavor flav)
-    {
-        state = flav;
-    }
-
-    public flavor getFlavor(){
-        return state;
-    }
-}
-
-public enum flavor
-{
-    cola,
-    cherry,
-    lime
 }

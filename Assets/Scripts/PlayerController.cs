@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Data;
 
 public class playerController : MonoBehaviour
 {
@@ -149,6 +150,33 @@ public class playerController : MonoBehaviour
                 float n = hit.collider.gameObject.GetComponent<CounterSpot>().addFood(heldObj);
                 if(n > -0.5f)
                     placeObj(hit.collider.transform.GetChild(0), n);
+            } else if(hit.collider.gameObject.GetComponent<Burger>() != null)
+            {
+                Burger bur = hit.collider.gameObject.GetComponent<Burger>();
+                if(heldObj.GetComponent<Burger>() != null && bur.getStatus() && !bur.hasIngred(IngredType.bun))
+                {
+                    heldObj.GetComponent<Burger>().setStatus(true);
+                    placeObj(bur.transform);
+                    Destroy(bur.gameObject);
+                    return;
+                }
+                if(heldObj != null && bur.getStatus()){
+                    if(bur.addIngred(heldObj))
+                        placeObj(bur.transform, bur.getHeight());
+                    Debug.Log(bur.getHeight());
+                    return;
+                }
+                if(heldObj == null && bur.hasIngred(IngredType.bun)){
+                    GameObject newBur = new GameObject();
+                    newBur.AddComponent<Burger>();
+                    newBur.AddComponent<BoxCollider>();
+                    newBur.transform.parent = bur.transform.parent;
+                    newBur.transform.localEulerAngles = new Vector3();
+                    newBur.transform.localPosition = new Vector3();
+
+                    grabObj(bur.gameObject);
+                    bur.setStatus(false);
+                }
             }
         }
     }

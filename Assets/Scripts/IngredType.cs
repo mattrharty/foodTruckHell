@@ -8,9 +8,5 @@ public enum IngredType
     lettuce,
     tomato,
     pickles,
-    cheese,
-    unfried_fries,
-    fries,
-    burnt_fries,
-    soda
+    cheese
 }
