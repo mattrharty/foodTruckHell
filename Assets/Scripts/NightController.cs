@@ -20,6 +20,8 @@ public class NightController : MonoBehaviour
 
     [SerializeField] private Animator jumpscare;
 
+    [SerializeField] private int zombAI;
+
     [SerializeField] private float nightLength;
     [SerializeField] private Transform[] SpawnLoc;
     [SerializeField] private GameObject zombiePrefab;
@@ -92,6 +94,8 @@ public class NightController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(zombAI == 0)
+            return;
         spawnTime += Time.fixedDeltaTime;
         if(spawnTime >= spawnCooldown){
             spawnTime = 0;

@@ -52,12 +52,13 @@ public class flashlightPlayer : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 500, layer))
             {
                 flashlightEffect.position = hit.point - new Vector3 (0.0f, 0.6f, 0.0f);
-                flashlightEffect.parent.eulerAngles = new Vector3 (0, flashlightEffect.localPosition.x / 0.25f * 30, 0);
+                flashlightEffect.parent.eulerAngles = new Vector3 (0, Mathf.Clamp(flashlightEffect.localPosition.x / 0.25f * 30, -20.0f, 20.0f), 0);
 
                 float depth = Mathf.Abs(flashlightEffect.position.z - spotLight.position.z);
                 spotLight.eulerAngles = new Vector3 (toDeg(Mathf.Atan(flashlightEffect.position.y / depth)) * -1.0f + 22.5f, toDeg(Mathf.Atan(flashlightEffect.position.x / depth)), 0);
             }
         }
+
 
         if (input.action.IsPressed())
         {

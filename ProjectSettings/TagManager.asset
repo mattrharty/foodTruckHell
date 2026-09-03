@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - grillSpot
   - global
@@ -40,6 +40,16 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Darkness
+    uniqueID: 4106150143
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Foil
+    uniqueID: 1547634965
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines:
+  - UnityEngine.Rendering.Universal.UniversalRenderPipeline

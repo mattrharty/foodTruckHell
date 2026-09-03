@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Burger : MonoBehaviour
@@ -27,10 +28,10 @@ public class Burger : MonoBehaviour
         if (isValid(ing.getName()))
         {
             ingreds.Add(ing);
+            ing.plate(ingreds.Count + 100);
             return true;
         }
-        else
-            return false;
+        return false;
     }
 
     private bool isValid(IngredType type)
@@ -50,7 +51,15 @@ public class Burger : MonoBehaviour
     {
         if (!canEdit)
         {
-            //change burger to foiled burger
+            foreach(SpriteRenderer sr in transform.GetComponentsInChildren<SpriteRenderer>())
+                sr.enabled = false;
+            gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            gameObject.GetComponent<SpriteRenderer>().size = new Vector2 (0.90f, 0.66f + getHeight());
+        } else
+        {
+            foreach(SpriteRenderer sr in transform.GetComponentsInChildren<SpriteRenderer>())
+                sr.enabled = true;
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         gameObject.GetComponent<BoxCollider>().size = new Vector3(1.0f, 1.0f + getHeight() * 2, 0.2f);
@@ -83,7 +92,7 @@ public class Burger : MonoBehaviour
         {
             Ingred ing = ingreds[i];
             if(ing.getName() == IngredType.bun)
-                h += 0.175f;
+                h += 0.16f;
             else if(ing.getName() == IngredType.cooked_patty)
                 h += 0.15f;
             else

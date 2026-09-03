@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Data;
+using System;
+using Unity.VisualScripting;
 
 public class playerController : MonoBehaviour
 {
@@ -67,6 +69,9 @@ public class playerController : MonoBehaviour
 
     public void turnHandler(bool left)
     {
+        if(!canInteract)
+            return;
+
         if (left)
             StartCoroutine(turnLeft());
         else
@@ -76,6 +81,14 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Fixes position
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName("Window"))
+            pos = "window";
+        else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Grill"))
+            pos = "grill";
+        else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Back"))
+            pos = "back";
+
         // Checks canInteract
         if (!canInteract)
         {
@@ -147,16 +160,26 @@ public class playerController : MonoBehaviour
             {
                 if(heldObj == null)
                     return;
-                float n = hit.collider.gameObject.GetComponent<CounterSpot>().addFood(heldObj);
-                if(n > -0.5f)
-                    placeObj(hit.collider.transform.GetChild(0), n);
+                if(heldObj.GetComponent<Burger>() != null && hit.collider.transform.GetChild(0).childCount == 0){
+                    Transform daddy = hit.collider.transform.GetChild(0);
+                    daddy.localPosition = new Vector3 (daddy.localPosition.x, heldObj.GetComponent<SpriteRenderer>().size.y / 4, daddy.localPosition.z);
+                    placeObj(hit.collider.transform.GetChild(0));
+                }
+                else if(heldObj.GetComponent<Fries>() != null && hit.collider.transform.GetChild(0).childCount == 1){
+                    placeObj(hit.collider.transform.GetChild(1));
+                }
+                else if(heldObj.GetComponent<Soda>() != null && hit.collider.transform.GetChild(0).childCount == 2){
+                    placeObj(hit.collider.transform.GetChild(2));
+                }
             } else if(hit.collider.gameObject.GetComponent<Burger>() != null)
             {
                 Burger bur = hit.collider.gameObject.GetComponent<Burger>();
-                if(heldObj.GetComponent<Burger>() != null && bur.getStatus() && !bur.hasIngred(IngredType.bun))
+                if(heldObj != null && heldObj.GetComponent<Burger>() != null && bur.getStatus() && !bur.hasIngred(IngredType.bun))
                 {
                     heldObj.GetComponent<Burger>().setStatus(true);
                     placeObj(bur.transform);
+                    bur.transform.GetChild(0).parent = bur.transform.parent;
+
                     Destroy(bur.gameObject);
                     return;
                 }
@@ -170,9 +193,18 @@ public class playerController : MonoBehaviour
                     GameObject newBur = new GameObject();
                     newBur.AddComponent<Burger>();
                     newBur.AddComponent<BoxCollider>();
+                    newBur.GetComponent<BoxCollider>().size = new Vector3 (0, 0.1f, 0);
+                    newBur.AddComponent<SpriteRenderer>();
+
+                    newBur.GetComponent<SpriteRenderer>().sprite = bur.GetComponent<SpriteRenderer>().sprite;
+                    newBur.GetComponent<SpriteRenderer>().drawMode = bur.GetComponent<SpriteRenderer>().drawMode;
+                    newBur.GetComponent<SpriteRenderer>().sortingLayerName = "Foil";
+
+                    newBur.name = "Burger";
                     newBur.transform.parent = bur.transform.parent;
                     newBur.transform.localEulerAngles = new Vector3();
                     newBur.transform.localPosition = new Vector3();
+                    newBur.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                     grabObj(bur.gameObject);
                     bur.setStatus(false);
