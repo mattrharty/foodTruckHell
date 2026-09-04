@@ -193,7 +193,7 @@ public class playerController : MonoBehaviour
                     GameObject newBur = new GameObject();
                     newBur.AddComponent<Burger>();
                     newBur.AddComponent<BoxCollider>();
-                    newBur.GetComponent<BoxCollider>().size = new Vector3 (0, 0.1f, 0);
+                    newBur.GetComponent<BoxCollider>().size = new Vector3 (0.5f, 0.1f, 0.5f);
                     newBur.AddComponent<SpriteRenderer>();
 
                     newBur.GetComponent<SpriteRenderer>().sprite = bur.GetComponent<SpriteRenderer>().sprite;

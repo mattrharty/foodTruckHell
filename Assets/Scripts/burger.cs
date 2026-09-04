@@ -62,7 +62,7 @@ public class Burger : MonoBehaviour
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
 
-        gameObject.GetComponent<BoxCollider>().size = new Vector3(1.0f, 1.0f + getHeight() * 2, 0.2f);
+        gameObject.GetComponent<BoxCollider>().size = new Vector3(0.7f, 1.0f + getHeight() * 2, 0.2f);
     }
 
     public bool hasIngred(IngredType type)

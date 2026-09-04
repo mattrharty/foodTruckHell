@@ -24681,7 +24681,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -26.37, y: 0.6999969}
+  m_AnchoredPosition: {x: -26.37, y: 0.00000071525574}
   m_SizeDelta: {x: 57, y: 14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &726618509
@@ -38628,7 +38628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8609b5e5b01e67d40a79ad8ce2916cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalBattery: 100
+  totalBattery: 30
   input: {fileID: 4201784786509498828, guid: daf0da503d894a94eafbe98e38d2de28, type: 3}
   player: {fileID: 1386864742}
   batStates:
@@ -39886,7 +39886,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -25.2, y: 0.7}
+  m_AnchoredPosition: {x: -25.2, y: 0}
   m_SizeDelta: {x: 63, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1516970502
@@ -40072,7 +40072,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Size: {x: 0.5, y: 0.1, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1578593703
 MonoBehaviour:
@@ -40944,7 +40944,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Size: {x: 0.5, y: 0.1, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1723336188
 MonoBehaviour:
@@ -42136,7 +42136,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Size: {x: 0.5, y: 0.1, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1961148054
 MonoBehaviour:

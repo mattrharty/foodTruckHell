@@ -64,7 +64,7 @@ public class flashlightPlayer : MonoBehaviour
         {
             lightImg.sprite = lightStates[1];
             flashlightAnim.SetBool("clicking", true);
-            batteryLife -= Time.deltaTime * (batteryLife / 100f);
+            batteryLife -= Time.deltaTime;
             spotLight.gameObject.GetComponent<Light>().intensity = 6.0f;
 
             canvasLight.gameObject.SetActive(true);
