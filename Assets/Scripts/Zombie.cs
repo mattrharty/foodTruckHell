@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Zombie : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Zombie : MonoBehaviour
     public void Start()
     {
         hunger = 100;
+        GetComponent<NavMeshAgent>().SetDestination(new Vector3());
     }
 
     public void setHunger(int _hunger)
