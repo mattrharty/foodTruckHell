@@ -5,6 +5,9 @@ using UnityEngine;
 public class Fries : MonoBehaviour
 {
 
-    
+    public int getFoodVal()
+    {
+        return 20;
+    }
 
 }

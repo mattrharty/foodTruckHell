@@ -4,16 +4,15 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class NightController : MonoBehaviour
 {
-    
-    //[SerializeField] public static Material[] states;
-    private float time;
-    private int nightNum;
+    private float timeSinceWave;
     private float hungerMult;
     private float speedMult;
-    private float spawnCooldown;
+
+    private ZombieWave currentWave;
 
     [SerializeField] private Animator fadeOut;
     [SerializeField] private TMP_Text nightText;
@@ -22,30 +21,37 @@ public class NightController : MonoBehaviour
 
     [SerializeField] private int zombAI;
 
-    [SerializeField] private float nightLength;
     [SerializeField] private Transform[] SpawnLoc;
     [SerializeField] private GameObject zombiePrefab;
 
-    private List<Zombie>[] zoms;
-    private float spawnTime;
+    [SerializeField] private TextAsset defaultNightData;
+
+    private nightData night;
+
+    private Queue<Zombie>[] zoms;
+
+    private int waveTotal;
+    private int waveDead;
+
+    private float nextZom = 1.0f;
+    private int lastLane = -1;
 
     private bool nightEnded = false;
 
     public void Start()
     {
-        int num = 1;
-        time = 0;
-        spawnTime = 0;
+        timeSinceWave = 0;
         if(GameObject.FindGameObjectWithTag("global") != null)
-            num = GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>().getNightNum();
-        setNight(num);
-        zoms = new List<Zombie>[] {new List<Zombie>(), new List<Zombie>(), new List<Zombie>()};
+            night = GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>().getNightData();
+        else
+            night = JsonUtility.FromJson<nightData>(defaultNightData.text);
+        setNight(night);
+        zoms = new Queue<Zombie>[] {new Queue<Zombie>(), new Queue<Zombie>(), new Queue<Zombie>()};
     }
 
     public void orderUp(int lane, GameObject food)
     {
-        Debug.Log(lane);
-        StartCoroutine(eat(zoms[lane][0], food));
+        StartCoroutine(eat(zoms[lane].Peek(), food, lane));
     }
 
     public bool zombiePresent(int lane)
@@ -55,28 +61,80 @@ public class NightController : MonoBehaviour
         return true;
     }
 
-    private IEnumerator eat(Zombie z, GameObject food)
+    private IEnumerator eat(Zombie z, GameObject food, int lane)
     {
         yield return new WaitForSeconds(2);
-        int foodVal = food.transform.parent.gameObject.GetComponent<CounterSpot>().calculateFoodValue();
-        food.transform.parent.gameObject.GetComponent<CounterSpot>().clear();
-        foreach(Ingred ing in food.transform.GetComponentsInChildren<Ingred>())
-            Destroy(ing.gameObject);
+        int foodVal = food.GetComponent<CounterSpot>().calculateFoodValue();
+        food.GetComponent<CounterSpot>().clear(z.transform);
         if (z.eatFood(foodVal))
         {
             //fadeOut.SetTrigger("flicker");
             yield return new WaitForSeconds(1.25f);
-            Destroy(z.gameObject);
+            StartCoroutine(z.kill());
+            waveDead++;
+            zoms[lane].Dequeue();
         }
+    }
+
+    public void spawnZombie(string type, int lane)
+    {
+        //Spawns zombiiies
+        Debug.Log("Spawning zombie in lane " + (lane + 1));
+
+        waveTotal++;
+
+        float speed = speedMult;
+        int hunger = Mathf.RoundToInt(hungerMult * 100) - Random.Range(0, 15);
+        GameObject newZombie = Instantiate(zombiePrefab, SpawnLoc[lane]);
+        newZombie.transform.localPosition = new Vector3();
+        //newZombie.GetComponent<Animator>().speed = speed;
+        newZombie.GetComponent<Zombie>().setHunger(hunger);
+        newZombie.GetComponent<Zombie>().setControl(this);
+        zoms[lane].Enqueue(newZombie.GetComponent<Zombie>());
     }
 
     public void Update()
     {
         if(!nightEnded && Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene(0);
-        time += Time.deltaTime;
 
-        if(time >= nightLength && !nightEnded)
+        timeSinceWave += Time.deltaTime;
+        
+
+        bool nextWaveReady = false;
+        bool nightDone = false;
+
+        if (!night.hasNextWave())
+        {
+            nightDone = waveTotal > 0 && Mathf.RoundToInt(waveDead / (float)waveTotal * 100) == 100;
+        }   
+        else if((currentWave == null && timeSinceWave >= night.getStartDelay()) || (currentWave != null && !currentWave.hasNextZombie()))
+        {
+            if(currentWave == null)
+                nextWaveReady = true;
+            currentWave = night.getNextWave();
+        }
+
+        if(currentWave != null){
+            if(waveTotal > 0 && currentWave.isReadyToSpawn(timeSinceWave, waveDead / (float)waveTotal))
+            {
+                nextWaveReady = true;
+                waveDead = 0;
+                waveTotal = 0;
+                timeSinceWave = 0;
+            }
+
+            if(timeSinceWave > nextZom && (nextWaveReady || !currentWave.isFirstZombie()))
+            {
+                nextZom = timeSinceWave + 1.0f;
+                int lane = Random.Range(0, 3);
+                while(lane == lastLane)
+                    lane = Random.Range(0, 3);
+                spawnZombie(currentWave.getNextZombie(), lane);
+            }
+        }
+
+        if(nightDone && !nightEnded)
         {
             nightEnded = true;
             if (ColorUtility.TryParseHtmlString("#FFF6CB", out Color myColor))
@@ -87,30 +145,10 @@ public class NightController : MonoBehaviour
             fadeOut.SetTrigger("endNight");
 
             if(GameObject.FindGameObjectWithTag("global") != null)
-                GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>().setNightNum(nightNum + 1);
+                GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>().incrementNightNum();
             StartCoroutine(endNight());
         }
     }
-
-    void FixedUpdate()
-    {
-        if(zombAI == 0)
-            return;
-        spawnTime += Time.fixedDeltaTime;
-        if(spawnTime >= spawnCooldown){
-            spawnTime = 0;
-            int loc = Random.Range(0, 3);
-            float speed = speedMult;
-            int hunger = Mathf.RoundToInt(hungerMult * 100) - Random.Range(0, 15);
-            GameObject newZombie = Instantiate(zombiePrefab, SpawnLoc[loc]);
-            newZombie.transform.localPosition = new Vector3();
-            newZombie.GetComponent<Animator>().speed = speed;
-            newZombie.GetComponent<Zombie>().setHunger(hunger);
-            newZombie.GetComponent<Zombie>().setControl(this);
-            zoms[loc].Add(newZombie.GetComponent<Zombie>());
-        }
-    }
-
 
     private IEnumerator endNight()
     {
@@ -130,14 +168,11 @@ public class NightController : MonoBehaviour
         StartCoroutine(gameOver());
     }   
 
-    public void setNight(int _nightNum)
+    public void setNight(nightData n)
     {
-        nightNum = _nightNum;
-        hungerMult = 0.75f + 0.25f * nightNum;
-        speedMult = 0.9f + 0.1f * nightNum;
-        spawnCooldown = 8 * Mathf.Atan(-0.8f * (nightNum - 1)) + 15;
-        string[] days = new string[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        nightText.text = days[nightNum % 7] + " Night";
+        hungerMult = 0.75f + 0.25f * n.getZombAI();
+        speedMult = 0.9f + 0.1f * n.getZombAI();;
+        nightText.text = n.getName();
     }
 
 }

@@ -140,7 +140,6 @@ public class playerController : MonoBehaviour
                 heldObj = null;
             }
             else if(hit.collider.gameObject.tag.Equals("grillSpot")){
-                //Debug.Log(hit.collider.gameObject.transform.parent.gameObject.GetComponent<Grill>());
                 int i = hit.collider.gameObject.transform.GetSiblingIndex();
                 if(heldObj == null)
                     return;
@@ -149,10 +148,8 @@ public class playerController : MonoBehaviour
             }
             else if(hit.collider.gameObject.GetComponent<Ingred>() != null)
             {
-                Debug.Log(hit.collider.gameObject.GetComponent<Ingred>().canGrab());
                 if(!hit.collider.gameObject.GetComponent<Ingred>().canGrab())
                     return;
-                Debug.Log(hit.collider.gameObject.name);
                 if(hit.collider.transform.parent.parent.tag.Equals("grillSpot"))
                     hit.collider.transform.parent.parent.parent.parent.gameObject.GetComponent<Grill>().emptySlot(hit.collider.gameObject);
                 grabObj(hit.collider.gameObject);
@@ -163,12 +160,15 @@ public class playerController : MonoBehaviour
                 if(heldObj.GetComponent<Burger>() != null && hit.collider.transform.GetChild(0).childCount == 0){
                     Transform daddy = hit.collider.transform.GetChild(0);
                     daddy.localPosition = new Vector3 (daddy.localPosition.x, heldObj.GetComponent<SpriteRenderer>().size.y / 4, daddy.localPosition.z);
+                    hit.collider.gameObject.GetComponent<CounterSpot>().setBurger(heldObj.GetComponent<Burger>());
                     placeObj(hit.collider.transform.GetChild(0));
                 }
-                else if(heldObj.GetComponent<Fries>() != null && hit.collider.transform.GetChild(0).childCount == 1){
+                else if(heldObj.GetComponent<Fries>() != null && hit.collider.transform.GetChild(1).childCount == 0){
+                    hit.collider.gameObject.GetComponent<CounterSpot>().setFries(heldObj.GetComponent<Fries>());
                     placeObj(hit.collider.transform.GetChild(1));
                 }
-                else if(heldObj.GetComponent<Soda>() != null && hit.collider.transform.GetChild(0).childCount == 2){
+                else if(heldObj.GetComponent<Soda>() != null && hit.collider.transform.GetChild(2).childCount == 0){
+                    hit.collider.gameObject.GetComponent<CounterSpot>().setSoda(heldObj.GetComponent<Soda>());
                     placeObj(hit.collider.transform.GetChild(2));
                 }
             } else if(hit.collider.gameObject.GetComponent<Burger>() != null)
@@ -186,7 +186,6 @@ public class playerController : MonoBehaviour
                 if(heldObj != null && bur.getStatus()){
                     if(bur.addIngred(heldObj))
                         placeObj(bur.transform, bur.getHeight());
-                    Debug.Log(bur.getHeight());
                     return;
                 }
                 if(heldObj == null && bur.hasIngred(IngredType.bun)){

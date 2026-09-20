@@ -8,6 +8,8 @@ public class GlobalController : MonoBehaviour
 
     private saveFile save;
 
+    [SerializeField] private TextAsset[] nights;
+
 
     void Awake()
     {
@@ -41,18 +43,33 @@ public class GlobalController : MonoBehaviour
         return true;
     }
 
+    public nightData getNightData()
+    {
+        return JsonUtility.FromJson<nightData>(nights[save.currentNight].text);
+    }
+
     public int getNightNum()
     {
         return save.currentNight;
     }
 
-    public void setNightNum(int n)
+    public void incrementNightNum()
     {
         if(save == null)
         {
             save = new saveFile();
         }
-        save.currentNight = n;
+        save.currentNight++;
+        saveToFile();
+    }
+
+    public void setNightNum(int _nightNum)
+    {
+        if(save == null)
+        {
+            save = new saveFile();
+        }
+        save.currentNight = _nightNum;
         saveToFile();
     }
 

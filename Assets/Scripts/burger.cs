@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -99,6 +100,35 @@ public class Burger : MonoBehaviour
                 h += 0.1f;
         }
         return h;  
+    }
+
+    public int getFoodVal()
+    {
+        int val = 5;
+        foreach(Ingred ing in ingreds)
+        {
+            if(ing.getName() == IngredType.cooked_patty)
+                val += 30;
+            else
+                val += 5;
+        }
+        return val;
+    }
+
+    public IEnumerator sendOut(Transform target)
+    {
+        float yOffset = transform.position.y;
+        float totalDistance = Mathf.Abs(transform.position.z - target.position.z);
+        
+        while(Mathf.Abs(transform.position.z - target.position.z) < 0.001f)
+        {
+            float step = 1.0f * Time.deltaTime;
+            Vector3 newPos = Vector3.MoveTowards(transform.position, target.position, step);
+            float newY = Mathf.Sin(Mathf.Abs(transform.position.z - target.position.z) / totalDistance * Mathf.PI) + yOffset;
+            transform.position = new Vector3 (newPos.x, newY, newPos.z);
+            yield return new WaitForEndOfFrame();
+        }
+        Destroy(this);
     }
 
 }

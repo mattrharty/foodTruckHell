@@ -1,0 +1,34 @@
+{
+    "name": "Monday Night",
+    "startDelay": 12.0,
+    "batteryLife": 100.0,
+    "cookTime": 1.0,
+    "weather": "normal",
+    "stationsAvailable": [
+        "lettuce",
+        "pickles",
+        "tomatos"
+    ],
+    "waves": [
+        {
+            "minDelay": 3.0,
+            "percentDeadToSpawn": 0.50,
+            "zombies": [
+                "norm",
+                "norm",
+                "norm"
+            ],
+            "current": 0
+        },
+        {
+            "minDelay": 5.0,
+            "percentDeadToSpawn": 0.50,
+            "zombies": [
+                "norm"
+            ],
+            "current": 0
+        }
+    ],
+    "zombAI": 1,
+    "current": 0
+}

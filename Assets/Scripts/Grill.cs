@@ -48,7 +48,6 @@ public class Grill : MonoBehaviour
     public void turnDial(GameObject dial)
     {
         int index = int.Parse(dial.name.Substring(5)) - 1;
-        Debug.Log(index);
         if(!dialState[index]){
             dial.transform.eulerAngles = new Vector3 (-5.6f, 0.0f, -90.0f);
             indicators[index].sprite = indicatorStates[1];

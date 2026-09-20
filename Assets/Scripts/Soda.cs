@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class Soda : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int getFoodVal()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return 20;
     }
 }
