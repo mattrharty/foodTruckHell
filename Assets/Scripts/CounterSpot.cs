@@ -23,8 +23,8 @@ public class CounterSpot : MonoBehaviour
         if(!control.zombiePresent(transform.GetSiblingIndex()))
             return;
         Debug.Log("Rang bell for counter " + transform.parent.GetSiblingIndex());
-        transform.parent.gameObject.GetComponent<Animator>().SetTrigger("orderUp");
         control.orderUp(transform.GetSiblingIndex(), gameObject);
+        transform.parent.gameObject.GetComponent<Animator>().SetTrigger("orderUp");
     }
 
     public int calculateFoodValue()
@@ -45,9 +45,9 @@ public class CounterSpot : MonoBehaviour
     {
         if(transform.GetChild(0).childCount > 0)
             transform.GetChild(0).GetChild(0).parent = transform.root;
-        if(transform.GetChild(0).childCount > 0)
+        if(transform.GetChild(1).childCount > 0)
             transform.GetChild(1).GetChild(0).parent = transform.root;
-        if(transform.GetChild(0).childCount > 0)
+        if(transform.GetChild(2).childCount > 0)
             transform.GetChild(2).GetChild(0).parent = transform.root;
 
         if(burger != null)

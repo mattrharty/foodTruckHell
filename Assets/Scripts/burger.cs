@@ -117,6 +117,7 @@ public class Burger : MonoBehaviour
 
     public IEnumerator sendOut(Transform target)
     {
+        transform.parent = transform.root;
         float yOffset = transform.position.y;
         float totalDistance = Mathf.Abs(transform.position.z - target.position.z);
         
