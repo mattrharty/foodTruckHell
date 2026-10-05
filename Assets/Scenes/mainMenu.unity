@@ -228,9 +228,9 @@ RectTransform:
   - {fileID: 1735746996}
   m_Father: {fileID: 2113553213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1221.7583, y: -920}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1171.7583, y: -870}
   m_SizeDelta: {x: 1212.4836, y: 179.3175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &12110914
@@ -1652,9 +1652,9 @@ RectTransform:
   - {fileID: 1958523723}
   m_Father: {fileID: 2113553213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1221.7583, y: -654}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1171.7583, y: -604}
   m_SizeDelta: {x: 1212.4836, y: 179.3175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &385925403
@@ -1696,7 +1696,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1958523724}
   m_OnClick:
     m_PersistentCalls:
@@ -4550,9 +4550,9 @@ RectTransform:
   - {fileID: 129473265}
   m_Father: {fileID: 2113553213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1221.7583, y: -210}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1171.7583, y: -160}
   m_SizeDelta: {x: 1212.4836, y: 179.3175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1093377164
@@ -5184,9 +5184,9 @@ RectTransform:
   - {fileID: 2117404908}
   m_Father: {fileID: 2113553213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1221.7583, y: -423}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1171.7583, y: -373}
   m_SizeDelta: {x: 1212.4836, y: 179.3175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1268983500

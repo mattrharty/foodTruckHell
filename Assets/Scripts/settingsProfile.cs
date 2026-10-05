@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using Palmmedia.ReportGenerator.Core;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.InputSystem;
 
 public class settingsProfile
 {
@@ -70,7 +67,7 @@ public class settingsProfile
         musicVolume = 0.4f;
         turnMode = "hover";
         display = "fullscreen";
-        resolution = new int[] {1920, 1080};       
+        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height};       
     }
 
     public settingsProfile(AudioMixer mixer, GlobalController global, string path)
@@ -84,7 +81,7 @@ public class settingsProfile
         musicVolume = 0.4f;
         turnMode = "hover";
         display = "fullscreen";
-        resolution = new int[] {1920, 1080};     
+        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height};     
     }
 
     public void setVars(AudioMixer mixer, GlobalController global, string path)

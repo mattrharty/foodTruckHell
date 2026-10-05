@@ -16,6 +16,8 @@ public class SettingsMenu : MonoBehaviour
 
     public settingsProfile settings;
 
+    private List<Resolution> resolutions;
+
     public virtual void back()
     {
         transform.parent.parent.GetComponent<PauseMenu>().closeSettings();
@@ -31,11 +33,15 @@ public class SettingsMenu : MonoBehaviour
                 drop.onValueChanged.AddListener((int i) => {setSettings(drop.gameObject.name, i);});
         }
 
+        resolutions = new List<Resolution>();
+
         List<String> strs = new List<String>();
         Resolution[] r = Screen.resolutions;
         for(int i = 0; i < r.Length; i++)
-            if (i == 0 || !(r[i].width == r[i - 1].width && r[i].height == r[i - 1].height))
+            if (i == 0 || !(r[i].width == r[i - 1].width && r[i].height == r[i - 1].height)){
                 strs.Add(string.Format("{0} x {1}", r[i].width, r[i].height));
+                resolutions.Add(r[i]);
+            }
         res.ClearOptions();
         res.AddOptions(strs);
 
@@ -81,7 +87,7 @@ public class SettingsMenu : MonoBehaviour
         if(option.Equals("display"))
             settings.display = i == 0 ? "fullscreen" : i == 1 ? "borderless" : "windowed";
         if(option.Equals("resolution"))
-            settings.resolution = new int[] {Screen.resolutions[i].width, Screen.resolutions[i].height};
+            settings.resolution = new int[] {resolutions[i].width, resolutions[i].height};
     }
 
     // Update is called once per frame

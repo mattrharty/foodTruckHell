@@ -42,16 +42,16 @@ public class MainMenu : MonoBehaviour
     public void settings()
     {
         settingsMenu.gameObject.SetActive(true);
-        foreach(Transform t in transform.GetComponentsInChildren<Transform>())
-            t.gameObject.SetActive(false);
+        for(int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(false);
     }
 
     public void closeSettings()
     {
         settingsMenu.settings.saveToJSON(Application.persistentDataPath);
         settingsMenu.gameObject.SetActive(false);
-        foreach(Transform t in transform.GetComponentsInChildren<Transform>())
-            t.gameObject.SetActive(true);
+        for(int i = 0; i < transform.childCount; i++)
+            transform.GetChild(i).gameObject.SetActive(true);
     }
     
     public void quit()
