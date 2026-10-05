@@ -117,19 +117,20 @@ public class Burger : MonoBehaviour
 
     public IEnumerator sendOut(Transform target)
     {
-        transform.parent = transform.root;
-        float yOffset = transform.position.y;
+        float yOffset = 1.67f;
+        transform.parent = transform.root.root;
+        
         float totalDistance = Mathf.Abs(transform.position.z - target.position.z);
         
-        while(Mathf.Abs(transform.position.z - target.position.z) < 0.001f)
+        while(Mathf.Abs(transform.position.z - target.position.z) > 0.001f)
         {
-            float step = 1.0f * Time.deltaTime;
+            float step = 24.0f * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(transform.position, target.position, step);
-            float newY = Mathf.Sin(Mathf.Abs(transform.position.z - target.position.z) / totalDistance * Mathf.PI) + yOffset;
+            float newY = Mathf.Sin(Mathf.Abs(transform.position.z - target.position.z) / totalDistance * Mathf.PI) * 6 + yOffset;
             transform.position = new Vector3 (newPos.x, newY, newPos.z);
             yield return new WaitForEndOfFrame();
         }
-        Destroy(this);
+        Destroy(gameObject);
     }
 
 }

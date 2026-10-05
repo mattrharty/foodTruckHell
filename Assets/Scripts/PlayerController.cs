@@ -1,12 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Data;
-using System;
-using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour
 {
@@ -18,7 +13,10 @@ public class playerController : MonoBehaviour
     [SerializeField] private InputActionReference left;
     [SerializeField] private InputActionReference right;
     [SerializeField] private InputActionReference flashlight;
+    [SerializeField] private InputActionReference pause;
+
     [SerializeField] private GameObject[] turnHUD;
+    [SerializeField] private PauseMenu pauseMenu;
 
     private string pos;
 
@@ -31,6 +29,25 @@ public class playerController : MonoBehaviour
         pos = "window";
 
         anim.Play("backWindow", 0, 1.0f);
+
+        pause.action.Enable();
+        pause.action.performed += pauseGame;
+    }
+
+    public void OnDisable()
+    {
+        pause.action.performed -= pauseGame;
+        pause.action.Disable();
+    }
+
+    public void pauseGame(InputAction.CallbackContext context)
+    {
+        canInteract = !pauseMenu.pauseGame();
+    }
+
+    public void pauseGame()
+    {
+        canInteract = !pauseMenu.pauseGame();
     }
 
     public IEnumerator turnLeft()
@@ -81,6 +98,7 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Fixes position
         if(anim.GetCurrentAnimatorStateInfo(0).IsName("Window"))
             pos = "window";
@@ -116,6 +134,8 @@ public class playerController : MonoBehaviour
         {
             StartCoroutine(turnRight());
         }
+
+        
 
         // Create a ray from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

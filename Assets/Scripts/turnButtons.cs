@@ -4,15 +4,33 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.InputSystem;
 
-public class turnButtons : MonoBehaviour, IPointerEnterHandler
+public class turnButtons : MonoBehaviour
 {
     
     [SerializeField] private playerController player;
+    [SerializeField] private InputActionReference click;
+    private bool overHUD = false;
 
-
-    public void OnPointerEnter(PointerEventData obj)
+    // Update is called once per frame
+    void Update()
     {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        overHUD = false;
+        foreach(RaycastResult r in results)
+            if(r.gameObject.name.Equals(gameObject.name))
+                overHUD = true;
+
+        if((!click.action.IsPressed() && GameObject.FindGameObjectWithTag("global").GetComponent<GlobalController>().turnMode.Equals("click")) || !overHUD)
+            return;
         if(gameObject.name.Equals("Turn Left"))
         {
             player.turnHandler(true);
@@ -21,11 +39,5 @@ public class turnButtons : MonoBehaviour, IPointerEnterHandler
         {
             player.turnHandler(false);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

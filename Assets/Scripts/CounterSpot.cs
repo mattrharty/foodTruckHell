@@ -20,11 +20,11 @@ public class CounterSpot : MonoBehaviour
 
     public void ding()
     {
-        if(!control.zombiePresent(transform.GetSiblingIndex()))
+        //Debug.Log("Rang bell for counter " + transform.parent.GetSiblingIndex());
+        if(!control.zombiePresent(transform.parent.GetSiblingIndex()))
             return;
-        Debug.Log("Rang bell for counter " + transform.parent.GetSiblingIndex());
-        control.orderUp(transform.GetSiblingIndex(), gameObject);
         transform.parent.gameObject.GetComponent<Animator>().SetTrigger("orderUp");
+        control.orderUp(transform.parent.GetSiblingIndex(), gameObject);
     }
 
     public int calculateFoodValue()

@@ -30526,7 +30526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1386864742}
-  click: {fileID: -4260493022941957211, guid: daf0da503d894a94eafbe98e38d2de28, type: 3}
 --- !u!1 &1070472214
 GameObject:
   m_ObjectHideFlags: 0
@@ -42913,7 +42912,7 @@ GameObject:
   - component: {fileID: 1386864744}
   m_Layer: 0
   m_Name: Player Controller
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49183,7 +49182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1386864742}
-  click: {fileID: -4260493022941957211, guid: daf0da503d894a94eafbe98e38d2de28, type: 3}
 --- !u!1 &1961774136
 GameObject:
   m_ObjectHideFlags: 0

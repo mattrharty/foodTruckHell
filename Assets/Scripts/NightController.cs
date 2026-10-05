@@ -4,7 +4,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 
 public class NightController : MonoBehaviour
 {
@@ -51,6 +50,7 @@ public class NightController : MonoBehaviour
 
     public void orderUp(int lane, GameObject food)
     {
+        //Debug.Log("Launching at zombie in lane " + lane);
         StartCoroutine(eat(zoms[lane].Peek(), food, lane));
     }
 
@@ -63,9 +63,9 @@ public class NightController : MonoBehaviour
 
     private IEnumerator eat(Zombie z, GameObject food, int lane)
     {
-        yield return new WaitForSeconds(2);
         int foodVal = food.GetComponent<CounterSpot>().calculateFoodValue();
         food.GetComponent<CounterSpot>().clear(z.transform);
+        yield return new WaitForSeconds(2);
         if (z.eatFood(foodVal))
         {
             //fadeOut.SetTrigger("flicker");
@@ -79,7 +79,7 @@ public class NightController : MonoBehaviour
     public void spawnZombie(string type, int lane)
     {
         //Spawns zombiiies
-        Debug.Log("Spawning zombie in lane " + (lane + 1));
+        //Debug.Log("Spawning zombie in lane " + (lane + 1));
 
         waveTotal++;
 
@@ -95,9 +95,6 @@ public class NightController : MonoBehaviour
 
     public void Update()
     {
-        if(!nightEnded && Input.GetKeyDown(KeyCode.Escape))
-            SceneManager.LoadScene(0);
-
         timeSinceWave += Time.deltaTime;
         
 
