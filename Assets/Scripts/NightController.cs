@@ -11,6 +11,17 @@ public class NightController : MonoBehaviour
     private float hungerMult;
     private float speedMult;
 
+    /// <summary>
+    /// Tracks night progress
+    /// 0 = Shutter to be opened
+    /// 1 = Merchant
+    /// 2 = Zombie attack
+    /// 3 = Boss
+    /// 4 = Shutter to be closed
+    /// 5 = Shutter closed
+    /// </summary>
+    public int nightProg{ get; private set;} = 0;
+
     private ZombieWave currentWave;
 
     [SerializeField] private Animator fadeOut;
@@ -34,8 +45,6 @@ public class NightController : MonoBehaviour
 
     private float nextZom = 1.0f;
     private int lastLane = -1;
-
-    private bool nightEnded = false;
 
     public void Start()
     {
@@ -76,6 +85,12 @@ public class NightController : MonoBehaviour
         }
     }
 
+    public void incrementProg()
+    {
+        nightProg++;
+        Debug.Log("Incrementing to progress " + nightProg);
+    }
+
     public void spawnZombie(string type, int lane)
     {
         //Spawns zombiiies
@@ -94,16 +109,19 @@ public class NightController : MonoBehaviour
     }
 
     public void Update()
-    {
-        timeSinceWave += Time.deltaTime;
-        
+    {      
 
         bool nextWaveReady = false;
-        bool nightDone = false;
+
+        if(nightProg < 1)
+            return;
+
+        timeSinceWave += Time.deltaTime;
 
         if (!night.hasNextWave())
         {
-            nightDone = waveTotal > 0 && Mathf.RoundToInt(waveDead / (float)waveTotal * 100) == 100;
+            if(waveTotal > 0 && Mathf.RoundToInt(waveDead / (float)waveTotal) == 1)
+                nightProg = 4;
         }   
         else if((currentWave == null && timeSinceWave >= night.getStartDelay()) || (currentWave != null && !currentWave.hasNextZombie()))
         {
@@ -131,9 +149,9 @@ public class NightController : MonoBehaviour
             }
         }
 
-        if(nightDone && !nightEnded)
+        if(nightProg == 5)
         {
-            nightEnded = true;
+            nightProg++;
             if (ColorUtility.TryParseHtmlString("#FFF6CB", out Color myColor))
             {
                 fadeOut.gameObject.GetComponent<Image>().color = myColor;

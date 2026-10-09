@@ -55,19 +55,27 @@ public class settingsProfile
         set { _resolution = value; refresh(); }
     }
 
+    [NonSerialized]
     private string path;
+    [NonSerialized]
     private AudioMixer mixer;
     [NonSerialized]
     public GlobalController global;
 
+    [NonSerialized]
+    private bool setup = false;
+
     public settingsProfile()
     {
+        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height}; 
         masterVolume = 0.4f;
         soundVolume = 0.4f;
         musicVolume = 0.4f;
         turnMode = "hover";
-        display = "fullscreen";
-        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height};       
+        display = "fullscreen";   
+        
+        setup = true;
+        refresh();
     }
 
     public settingsProfile(AudioMixer mixer, GlobalController global, string path)
@@ -76,12 +84,15 @@ public class settingsProfile
         this.global = global;
         this.path = path;   
 
+        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height};  
         masterVolume = 0.4f;
         soundVolume = 0.4f;
         musicVolume = 0.4f;
         turnMode = "hover";
         display = "fullscreen";
-        resolution = new int[] {Screen.currentResolution.width, Screen.currentResolution.height};     
+
+        setup = true;
+        refresh();
     }
 
     public void setVars(AudioMixer mixer, GlobalController global, string path)
@@ -116,6 +127,9 @@ public class settingsProfile
 
     public void refresh()
     {
+        if(!setup)
+            return;
+
         saveToJSON(path);
 
         if(global == null)

@@ -7,6 +7,9 @@ public class playerController : MonoBehaviour
 {
 
     [SerializeField] private Transform holdLoc;
+
+    [SerializeField] private NightController night;
+
     private GameObject heldObj = null;
     private bool canInteract = false;
 
@@ -20,6 +23,10 @@ public class playerController : MonoBehaviour
 
     private string pos;
 
+    private float shutterOffset;
+    private Transform shutter;
+    private bool holdingShutter;
+
     [SerializeField] private Animator anim;
 
     // Start is called before the first frame update
@@ -27,6 +34,8 @@ public class playerController : MonoBehaviour
     {
         canInteract = true;
         pos = "window";
+
+        shutterOffset = 0.0f;
 
         anim.Play("backWindow", 0, 1.0f);
 
@@ -108,14 +117,13 @@ public class playerController : MonoBehaviour
             pos = "back";
 
         // Checks canInteract
-        if (!canInteract)
+        if (!canInteract || night.nightProg <= 0 || night.nightProg >= 4)
         {
             left.action.Disable();
             right.action.Disable();
             flashlight.action.Disable();
             foreach(GameObject obj in turnHUD)
                 obj.SetActive(false);
-            return;
         } else
         {
             left.action.Enable();
@@ -124,6 +132,9 @@ public class playerController : MonoBehaviour
             foreach(GameObject obj in turnHUD)
                 obj.SetActive(true);
         }
+
+        if(!canInteract)
+            return;
 
         // Checks for left and right input
         if (left.action.IsPressed())
@@ -142,8 +153,43 @@ public class playerController : MonoBehaviour
         RaycastHit hit;
 
         // Cast the ray and check if it hits anything
-        if (Physics.Raycast(ray, out hit) && Input.GetMouseButtonDown(0)) 
+        if (Physics.Raycast(ray, out hit)) 
         {
+
+            if(hit.collider.gameObject.name.Equals("Shutter Handle") && Input.GetMouseButtonDown(0)){
+                holdingShutter = true;
+                shutter = hit.collider.gameObject.transform.parent;
+            }
+            if(!Input.GetMouseButton(0))
+                holdingShutter = false;
+            if(night.nightProg > 0)
+            {
+                if(night.nightProg != 4)
+                {
+                    holdingShutter = false;
+                    shutter.GetComponent<Rigidbody>().useGravity = false;
+                } else
+                {
+                    shutter.GetComponent<Rigidbody>().mass = -1.0f;
+                }
+            }
+            if(holdingShutter){
+                shutter.GetComponent<Rigidbody>().useGravity = false;
+                if(shutterOffset == 0.0f)
+                    shutterOffset = hit.point.y - shutter.position.y;
+                shutter.position = new Vector3(0.0f, Mathf.Clamp(hit.point.y - shutterOffset, 0.0f, 2.0f), 0.0f);
+                if((shutter.position.y > 1.999f && night.nightProg == 0) || (shutter.position.y > 0.001f && night.nightProg == 4))
+                {
+                    night.incrementProg();
+                }
+            } else if(shutter != null && (night.nightProg == 0 || night.nightProg == 4))
+            {
+                shutter.GetComponent<Rigidbody>().useGravity = true;
+                shutterOffset = 0.0f;
+            }
+
+            if(!Input.GetMouseButtonDown(0))
+                return;
             
             if(hit.collider.gameObject.GetComponent<IngredBin>() != null){
                 if(heldObj == null)
