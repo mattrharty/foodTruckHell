@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Diagnostics;
 
 public class NightController : MonoBehaviour
 {
@@ -35,6 +36,14 @@ public class NightController : MonoBehaviour
     [SerializeField] private GameObject zombiePrefab;
 
     [SerializeField] private TextAsset defaultNightData;
+
+    [SerializeField] private DialogueController dc;
+
+    [Header("Merchant References")]
+    [SerializeField] private Animator merchantAnim;
+    [SerializeField] private TextAsset merchDiag;
+
+    private bool inDiag;
 
     private nightData night;
 
@@ -108,12 +117,31 @@ public class NightController : MonoBehaviour
         zoms[lane].Enqueue(newZombie.GetComponent<Zombie>());
     }
 
+    private IEnumerator showMerchant()
+    {
+        merchantAnim.SetTrigger("enter");
+        dc.showDialogue(JsonUtility.FromJson<Dialogue>(merchDiag.text), true);
+        yield return new WaitForEndOfFrame();
+        yield return new WaitUntil(() => !dc.diagRunning);
+        merchantAnim.SetTrigger("leave");
+        incrementProg();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<playerController>().forceInteract();
+        inDiag = false;
+    }
+
     public void Update()
     {      
 
         bool nextWaveReady = false;
 
-        if(nightProg < 1)
+        if(nightProg == 1 && !inDiag)
+        {
+            inDiag = true;
+            StartCoroutine(showMerchant());
+        }
+
+
+        if(nightProg < 2)
             return;
 
         timeSinceWave += Time.deltaTime;

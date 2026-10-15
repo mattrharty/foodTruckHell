@@ -104,6 +104,14 @@ public class playerController : MonoBehaviour
             StartCoroutine(turnRight());
     }
 
+    /// <summary>
+    /// Sets <code>canInteract</code> to true.
+    /// </summary>
+    public void forceInteract()
+    {
+        canInteract = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -115,6 +123,9 @@ public class playerController : MonoBehaviour
             pos = "grill";
         else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Back"))
             pos = "back";
+
+        if(night.nightProg == 1)
+            canInteract = false;
 
         // Checks canInteract
         if (!canInteract || night.nightProg <= 0 || night.nightProg >= 4)

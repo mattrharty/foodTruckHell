@@ -1,0 +1,56 @@
+{
+  "lane": 0,
+  "speakerName": "Merchant",
+  "lines": [
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Hello, you seem new around here, I'll help you get started"
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Many restless souls lie here and will soon rise from their grave"
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Once they do, you better be ready!"
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "The fry cook before you used to burgers to defend themselves."
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "They even installed launchers in the counter to send off the burgers."
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Just wait til a zombie appears ahead of the counter and press the bell."
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "As for the burger assembling, it's easy."
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Cook the burgers behind on the grill, don't let the burgers burn though."
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Combine the patties with other ingredients on the prep table and then move them to the counter for attack!"
+    },
+    {
+        "emotion": null,
+        "bubbleSprite": 0,
+        "line": "Good luck!"
+    }
+  ]
+}

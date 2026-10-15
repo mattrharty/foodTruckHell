@@ -26,6 +26,7 @@ public class Zombie : MonoBehaviour
     public bool eatFood(int foodVal)
     {
         hunger -= foodVal;
+        Debug.Log("Hunger is now: " + hunger);
         StartCoroutine(eatAnim(foodVal));
         return hunger <= 0;
     }
@@ -61,11 +62,16 @@ public class Zombie : MonoBehaviour
     {
         Animator anim = GetComponent<Animator>();
 
+        /*
         anim.SetTrigger("kill");
-        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f);
+        */
+        yield return new WaitForSeconds(0.5f);
 
-        Destroy(this);
+        Debug.Log("Zombie died in lane " + transform.parent.GetSiblingIndex());
+
+        Destroy(gameObject);
     }
 
 }
