@@ -49,10 +49,7 @@ public class Dialogue
     /// <summary>
     /// Returns whether the dialogue has another line.
     /// </summary>
-    /// <returns></returns> <summary>
-    /// Returns true if there is another line, otherwise false.
-    /// </summary>
-    /// <returns></returns>
+    /// <returns>True if there is another line, otherwise false.</returns>
     public bool hasNext()
     {
         return index < lines.Count();
@@ -61,10 +58,7 @@ public class Dialogue
     /// <summary>
     /// Returns the next line of dialogue and increments the index..
     /// </summary>
-    /// <returns></returns> <summary>
-    /// Returns the Line next.
-    /// </summary>
-    /// <returns></returns>
+    /// <returns>The next line of dialogue</returns>
     public Line next()
     {
         index++;

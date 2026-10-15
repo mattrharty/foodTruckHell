@@ -22,20 +22,15 @@ public class DialogueController : MonoBehaviour
     /// 3-5 = Yelling
     /// 6-8 = Thought
     /// 9-11 = Tired
+    /// 12-14 = Afar
     /// </summary>
     public Sprite[] bubbleTypes;
     
     /// <summary>
     /// Displays the given dialogue on screen.
     /// </summary>
-    /// <param name="d"></param> <summary>
-    /// The dialogue to be played.
-    /// </summary>
-    /// <param name="d"></param>
-    /// <param name="locked"></param> <summary>
-    /// Whether the dialogue will lock the player's input to force them to click through the dialogue.
-    /// </summary>
-    /// <param name="locked"></param>
+    /// <param name="d">The dialogue to be played.</param>
+    /// <param name="locked">Whether the dialogue will lock the player's input to force them to click through the dialogue.</param>
     public void showDialogue(Dialogue d, bool locked)
     {
         
