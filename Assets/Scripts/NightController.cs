@@ -120,9 +120,7 @@ public class NightController : MonoBehaviour
     private IEnumerator showMerchant()
     {
         merchantAnim.SetTrigger("enter");
-        dc.showDialogue(JsonUtility.FromJson<Dialogue>(merchDiag.text), true);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => !dc.diagRunning);
+        yield return StartCoroutine(dc.playDialogue(JsonUtility.FromJson<Dialogue>(merchDiag.text), true));
         merchantAnim.SetTrigger("leave");
         incrementProg();
         GameObject.FindGameObjectWithTag("Player").GetComponent<playerController>().forceInteract();

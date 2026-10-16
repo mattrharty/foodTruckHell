@@ -12,6 +12,7 @@ public class clickableObj : MonoBehaviour
     /// <summary>
     /// The event to be executed when this object is clicked.
     /// </summary>
+    [Tooltip("The event to be executed when this object is clicked.")]
     [SerializeField] private UnityEvent onClick;
 
     /// <summary>

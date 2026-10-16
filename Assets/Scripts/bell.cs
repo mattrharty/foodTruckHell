@@ -11,6 +11,7 @@ public class bell : MonoBehaviour
     /// <summary>
     /// The counter that the bell is for.
     /// </summary>
+    [Tooltip("The counter that the bell is for.")]
     [SerializeField] private CounterSpot counter;
 
     /// <summary>

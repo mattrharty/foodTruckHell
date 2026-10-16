@@ -25,10 +25,11 @@ public class CounterSpot : MonoBehaviour
     /// <summary>
     /// Reference to the night controller.
     /// </summary>
+    [Tooltip("Reference to the night controller.")]
     [SerializeField] NightController control;
 
     /// <summary>
-    /// Sends food at zombies and triggers counter <code>"orderUp"</code> animation.
+    /// Sends food at zombies and triggers counter <c>"orderUp"</c> animation.
     /// </summary>
     public void ding()
     {
