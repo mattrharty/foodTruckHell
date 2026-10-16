@@ -64,15 +64,25 @@ public class DialogueController : MonoBehaviour
             while (d.hasNext())
             {
                 Line l = d.next();
-                text.text = l.line;
                 dialogueBubble.sprite = bubbleTypes[3 * l.bubbleSprite + lane];
+                text.text = "";
+                foreach(char ch in l.line.ToCharArray())
+                {
+                    text.text += ch;
+                    yield return new WaitUntilClickorTime(0.03f);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        text.text = l.line;
+                        break;
+                    }
+                }
                 //Add emotion implementation;
                 yield return new WaitForEndOfFrame();
                 yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                yield return new WaitForEndOfFrame();
             }
         }
         dialogueBubble.transform.parent.gameObject.SetActive(false);
     }
-
 
 }

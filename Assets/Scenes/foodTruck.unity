@@ -600,7 +600,6 @@ MonoBehaviour:
   indicatorStates:
   - {fileID: -3303506857558755076, guid: 4cd8aa8d543fc4744b80d2c9f73efdb3, type: 3}
   - {fileID: 493337111055712639, guid: 4cd8aa8d543fc4744b80d2c9f73efdb3, type: 3}
-  dialState: 
   burners:
   - {fileID: 1922123587}
   - {fileID: 894852219}
@@ -27967,7 +27966,6 @@ MonoBehaviour:
   speakerName: {fileID: 335991898}
   bubbleTypes:
   - {fileID: 2328870124646720761, guid: 1630a8a5022deed4da8b50c3f517bc01, type: 3}
-  diagRunning: 0
 --- !u!4 &784521592
 Transform:
   m_ObjectHideFlags: 0
@@ -33699,7 +33697,6 @@ MonoBehaviour:
   nights:
   - {fileID: 4900000, guid: 725d5cedd65943542937ef481c9919db, type: 3}
   mixer: {fileID: 24100000, guid: 656ad28c545a9044ab205bc2ab446119, type: 2}
-  turnMode: hover
 --- !u!4 &1329912787
 Transform:
   m_ObjectHideFlags: 0
@@ -45668,6 +45665,7 @@ GameObject:
   - component: {fileID: 1503221247}
   - component: {fileID: 1503221248}
   - component: {fileID: 1503221249}
+  - component: {fileID: 1503221250}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -45794,6 +45792,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1503221250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503221246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ed57967c52645d390a89dcf8f61ba73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexJitter
+  AngleMultiplier: 1
+  SpeedMultiplier: 1
+  CurveScale: 25
 --- !u!1 &1516970500
 GameObject:
   m_ObjectHideFlags: 0

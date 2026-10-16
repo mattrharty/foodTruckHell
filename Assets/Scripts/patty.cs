@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class patty : MonoBehaviour
+public class Patty : Ingred
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public Patty(IngredType _name) : base (_name)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

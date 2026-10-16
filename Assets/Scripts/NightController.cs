@@ -4,12 +4,20 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Diagnostics;
 
 public class NightController : MonoBehaviour
 {
+    /// <summary>
+    /// The accumulated amount of time since the last wave spawned. Must be greater than or equal to 0.
+    /// </summary>
     private float timeSinceWave;
+    /// <summary>
+    /// The multiplier that affects the hunger of the zombies during the night.
+    /// </summary>
     private float hungerMult;
+    /// <summary>
+    /// The multiplier that affects the speed of the zombies during the night.
+    /// </summary>
     private float speedMult;
 
     /// <summary>
@@ -21,40 +29,105 @@ public class NightController : MonoBehaviour
     /// 4 = Shutter to be closed
     /// 5 = Shutter closed
     /// </summary>
-    public int nightProg{ get; private set;} = 0;
+    [System.NonSerialized]public int nightProg = 0;
 
+    /// <summary>
+    /// The current wave of zombies being spawned.
+    /// </summary>
     private ZombieWave currentWave;
 
+    [Header("HUD References")]
+    /// <summary>
+    /// The animator that controls the fade in and out of the screen.
+    /// </summary>
+    [Tooltip("The animator that controls the fade in and out of the screen.")]
     [SerializeField] private Animator fadeOut;
+    /// <summary>
+    /// The text that shows the current night.
+    /// </summary>
+    [Tooltip("The text that shows the current night.")]
     [SerializeField] private TMP_Text nightText;
 
+    [Space][Header("Zombie-Related Variables")]
+    /// <summary>
+    /// The animator that controls the jumpscare upon player death.
+    /// </summary>
+    [Tooltip("The animator that controls the jumpscare upon player death.")]
     [SerializeField] private Animator jumpscare;
-
+    /// <summary>
+    /// The relative difficultly level of the zombies.
+    /// </summary>
+    [Tooltip("The relative difficultly level of the zombies.")]
     [SerializeField] private int zombAI;
-
+    /// <summary>
+    /// An array of Transform components depicting the possible spawn locations of the zombies.
+    /// </summary>
+    [Tooltip("An array of Transform components depicting the possible spawn locations of the zombies.")]
     [SerializeField] private Transform[] SpawnLoc;
+    /// <summary>
+    /// The prefab of the zombie to be spawned.
+    /// </summary>
+    [Tooltip("The prefab of the zombie to be spawned.")]
     [SerializeField] private GameObject zombiePrefab;
 
+    [Space][Header("General References")]
+    /// <summary>
+    /// The text asset containing the <c>nightData</c> to be used for the current night.
+    /// </summary>
+    [Tooltip("The text asset containing the nightData to be used for the current night.")]
     [SerializeField] private TextAsset defaultNightData;
-
+    /// <summary>
+    /// A reference the Dialogue Controller.
+    /// </summary>
+    [Tooltip("A reference the Dialogue Controller.")]
     [SerializeField] private DialogueController dc;
 
-    [Header("Merchant References")]
+    [Space][Header("Merchant References")]
+    /// <summary>
+    /// The animator that controls the merchant.
+    /// </summary>
+    [Tooltip("The animator that controls the merchant.")]
     [SerializeField] private Animator merchantAnim;
+    /// <summary>
+    /// The text asset containing the dialogue for the merchant.
+    /// </summary>
+    [Tooltip("The text asset containing the dialogue for the merchant.")]
     [SerializeField] private TextAsset merchDiag;
 
+    /// <summary>
+    /// Tracks whether the player is currently in dialogue.
+    /// </summary>
     private bool inDiag;
 
+    /// <summary>
+    /// The <c>nightData</c> to be used for the night.
+    /// </summary>
     private nightData night;
 
+    /// <summary>
+    /// An array of queues of zombies storing references to the zombies in each lane.
+    /// </summary>
     private Queue<Zombie>[] zoms;
 
+    /// <summary>
+    /// The total amount of zombies to be spawned in the wave.
+    /// </summary>
     private int waveTotal;
+    /// <summary>
+    /// The amount of zombies killed during the current wave.
+    /// </summary>
     private int waveDead;
 
+    /// <summary>
+    /// The amount of time between zombies of the same wave spawning.
+    /// </summary>
     private float nextZom = 1.0f;
+    /// <summary>
+    /// The last lane that a zombie was spawned in.
+    /// </summary>
     private int lastLane = -1;
 
+    // Start is called before the first frame update
     public void Start()
     {
         timeSinceWave = 0;
@@ -66,12 +139,22 @@ public class NightController : MonoBehaviour
         zoms = new Queue<Zombie>[] {new Queue<Zombie>(), new Queue<Zombie>(), new Queue<Zombie>()};
     }
 
+    /// <summary>
+    /// Sends the given food down the given lane to the front zombie in that lane.
+    /// </summary>
+    /// <param name="lane">The lane for which <c>food</c> is sent down.</param>
+    /// <param name="food">The food to be sent down <c>lane</c>.</param>
     public void orderUp(int lane, GameObject food)
     {
         //Debug.Log("Launching at zombie in lane " + lane);
         StartCoroutine(eat(zoms[lane].Peek(), food, lane));
     }
 
+    /// <summary>
+    /// Checks whether there is a zombie present in a given lane.
+    /// </summary>
+    /// <param name="lane">The lane to be checked.</param>
+    /// <returns><c>true</c> if there is a zombie present in the lane, otherwise <c>false</c></returns>
     public bool zombiePresent(int lane)
     {
         if(zoms[lane].Count < 1)
@@ -79,6 +162,13 @@ public class NightController : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Removes the food from the counter and feeds it to the zombie. If the zombie's <c>hunger</c> is less than or equal to 0, than they are removed.
+    /// </summary>
+    /// <param name="z">The zombie to feed.</param>
+    /// <param name="food">The food to be fed to <c>z</c></param>
+    /// <param name="lane">The lane that <c>z</c> is in.</param>
+    /// <returns></returns>
     private IEnumerator eat(Zombie z, GameObject food, int lane)
     {
         int foodVal = food.GetComponent<CounterSpot>().calculateFoodValue();
@@ -94,12 +184,20 @@ public class NightController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Increments <c>nightProg</c> by 1.
+    /// </summary>
     public void incrementProg()
     {
         nightProg++;
         Debug.Log("Incrementing to progress " + nightProg);
     }
 
+    /// <summary>
+    /// Spawns a zombie of given type in the given lane.
+    /// </summary>
+    /// <param name="type">The type of zombie to spawn.</param>
+    /// <param name="lane">The lane in which to spawn the zombie.</param>
     public void spawnZombie(string type, int lane)
     {
         //Spawns zombiiies
@@ -117,6 +215,10 @@ public class NightController : MonoBehaviour
         zoms[lane].Enqueue(newZombie.GetComponent<Zombie>());
     }
 
+    /// <summary>
+    /// Summons the merchant and makes them leave once their dialogue is done.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator showMerchant()
     {
         merchantAnim.SetTrigger("enter");
@@ -127,6 +229,7 @@ public class NightController : MonoBehaviour
         inDiag = false;
     }
 
+    // Update is called once per frame
     public void Update()
     {      
 
@@ -171,6 +274,7 @@ public class NightController : MonoBehaviour
                 int lane = Random.Range(0, 3);
                 while(lane == lastLane)
                     lane = Random.Range(0, 3);
+                lastLane = lane;
                 spawnZombie(currentWave.getNextZombie(), lane);
             }
         }
@@ -191,24 +295,39 @@ public class NightController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reloads the scene after 2 seconds.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator endNight()
     {
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     } 
 
+    /// <summary>
+    /// Loads the main menu after 0.75 seconds.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator gameOver()
     {
         yield return new WaitForSeconds(0.75f);
         SceneManager.LoadScene(0);
     } 
 
+    /// <summary>
+    /// Triggers the jumpscare and reloads the scene.
+    /// </summary>
     public void die()
     {
         jumpscare.SetTrigger("die");
         StartCoroutine(gameOver());
     }   
 
+    /// <summary>
+    /// Sets the night's multipliers and night name according the given <c>nightData</c>.
+    /// </summary>
+    /// <param name="n">The <c>nightData</c> to pull <c>zombAI</c> and <c>name</c> from.</param>
     public void setNight(nightData n)
     {
         hungerMult = 0.75f + 0.25f * n.getZombAI();

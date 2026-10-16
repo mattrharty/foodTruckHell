@@ -194,6 +194,9 @@ public class flashlightPlayer : MonoBehaviour
         return rad * (180 / Mathf.PI);
     }
 
+    /// <summary>
+    /// Sets <c>blinking</c> to 4 so that the battery slot blinks red.
+    /// </summary>
     public void BlinkLight()
     {
         blinking = 4;
