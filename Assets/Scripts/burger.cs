@@ -166,27 +166,4 @@ public class Burger : MonoBehaviour
         return val;
     }
 
-    /// <summary>
-    /// Launches the burger towards the given zombie and destroys it once it has done so.
-    /// </summary>
-    /// <param name="target">The Transform component attached to the target zombie.</param>
-    /// <returns>WaitForEndOfFrame</returns>
-    public IEnumerator sendOut(Transform target)
-    {
-        float yOffset = 1.67f;
-        transform.parent = transform.root.root;
-
-        float totalDistance = Mathf.Abs(transform.position.z - target.position.z);
-
-        while (Mathf.Abs(transform.position.z - target.position.z) > 0.001f)
-        {
-            float step = 24.0f * Time.deltaTime;
-            Vector3 newPos = Vector3.MoveTowards(transform.position, target.position, step);
-            float newY = Mathf.Sin(Mathf.Abs(transform.position.z - target.position.z) / totalDistance * Mathf.PI) * 6 + yOffset;
-            transform.position = new Vector3(newPos.x, newY, newPos.z);
-            yield return new WaitForEndOfFrame();
-        }
-        Destroy(gameObject);
-    }
-
 }

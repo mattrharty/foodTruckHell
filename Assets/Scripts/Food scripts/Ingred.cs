@@ -6,16 +6,11 @@ using UnityEngine;
 public class Ingred : MonoBehaviour
 {
 
-    //Rewrite using subclasses!!
-
     [SerializeField] private IngredType name;
-    public Sprite[] states;
-    private float cookTime;
     private bool grabbable;
 
     public void Start()
     {
-        cookTime = 30;
         grabbable = true;
     }
 
